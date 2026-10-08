@@ -13,7 +13,7 @@ const pick = (o: any, ...keys: string[]) => {
   return undefined;
 };
 
-function mapBattle(b: any): Battle {
+export function mapBattle(b: any): Battle {
   return {
     id: b.id,
     code: b.code ?? "",
@@ -35,7 +35,7 @@ function mapBattle(b: any): Battle {
   };
 }
 
-function mapPortfolio(p: any): Portfolio {
+export function mapPortfolio(p: any): Portfolio {
   return {
     id: p.id,
     battleId: pick(p, "battleId", "battle_id"),
@@ -59,7 +59,7 @@ function mapPayment(r: any): Payment {
   };
 }
 
-function mapRegistration(r: any): Registration {
+export function mapRegistration(r: any): Registration {
   return {
     id: r.id,
     battleId: pick(r, "battleId", "battle_id"),

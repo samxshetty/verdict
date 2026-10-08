@@ -126,7 +126,7 @@ export interface NotificationLog {
 export interface Settings {
   upiId: string;
   payeeName: string;
-  adminPasscode: string;
+  adminPasscode?: string; // legacy (local mock) — admin access is now profiles.role
 }
 
 export interface DB {
@@ -138,6 +138,8 @@ export interface DB {
   notifications: NotificationLog[];
   settings: Settings;
   seq: Record<string, number>;
+  /** Public per-battle seat counts (view battle_seats). Absent → derive from registrations. */
+  seats?: Record<string, number>;
 }
 
 export interface Session {

@@ -1,48 +1,28 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { adminLogin, adminLogout, flushNotifications } from "@/lib/api";
+import { usePathname, useRouter } from "next/navigation";
+import { flushNotifications, signOut } from "@/lib/api";
 import { useAdmin, useDB } from "@/lib/store";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const admin = useAdmin();
   const db = useDB();
-  const [passcode, setPasscode] = useState("");
-  const [error, setError] = useState("");
   const path = usePathname();
+  const router = useRouter();
 
   if (admin === undefined) return null;
 
   if (!admin) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-black p-4 text-bone font-sans">
-        <form
-          className="w-full max-w-sm rounded-lg border border-line bg-ink-2 p-6 shadow-2xl"
-          onSubmit={async (e) => {
-            e.preventDefault();
-            setError("");
-            try {
-              await adminLogin(passcode);
-            } catch (err) {
-              setError((err as Error).message);
-            }
-          }}
-        >
-          <h1 className="font-display text-3xl tracking-wide text-gold">ADMIN LOGIN</h1>
-          <p className="mt-1 text-sm text-muted">Enter the master passcode to continue.</p>
-          <input
-            type="password"
-            autoFocus
-            className="mt-6 w-full border border-line bg-ink p-3 text-center text-xl tracking-widest outline-none focus:border-gold"
-            value={passcode}
-            onChange={(e) => setPasscode(e.target.value)}
-          />
-          {error && <p className="mt-2 text-sm text-red-400">{error}</p>}
-          <button className="mt-6 w-full bg-gold py-3 font-display tracking-[0.1em] text-ink hover:bg-gold-2">Access Panel</button>
-        </form>
+        <div className="w-full max-w-sm rounded-lg border border-line bg-ink-2 p-6 text-center shadow-2xl">
+          <h1 className="font-display text-3xl tracking-wide text-gold">ADMIN ONLY</h1>
+          <p className="mt-2 text-sm text-muted">Sign in with an account that has admin access to continue.</p>
+          <Link href="/login" className="mt-6 block w-full bg-gold py-3 font-display tracking-[0.1em] text-ink hover:bg-gold-2">
+            Sign in
+          </Link>
+        </div>
       </div>
     );
   }
@@ -78,7 +58,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           >
             {unread > 0 ? `Flush ${unread} notifications` : "Notifications synced"}
           </button>
-          <button onClick={adminLogout} className="text-sm text-muted hover:text-bone">
+          <button
+            onClick={async () => {
+              await signOut();
+              router.push("/login");
+            }}
+            className="text-sm text-muted hover:text-bone"
+          >
             Sign out
           </button>
         </div>
