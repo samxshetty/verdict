@@ -79,8 +79,8 @@ function mapRegistration(r: any): Registration {
 
 /** Loads only what this user needs. RLS should enforce the same rules server-side. */
 export async function loadDB(email: string): Promise<DB> {
-  const [battles, portfolios, registrations] = await Promise.all([
-    supabase.from("battles").select("*"),
+  const [events, portfolios, registrations] = await Promise.all([
+    supabase.from("events").select("*"),
     supabase.from("portfolios").select("*"),
     supabase
       .from("registrations")
@@ -88,12 +88,12 @@ export async function loadDB(email: string): Promise<DB> {
       .or(`owner_email.eq.${email},viewers.cs.{"${email}"}`),
   ]);
 
-  const err = battles.error || portfolios.error || registrations.error;
+  const err = events.error || portfolios.error || registrations.error;
   if (err) throw new Error(err.message);
 
   return {
     version: 1,
-    battles: (battles.data ?? []).map(mapBattle),
+    battles: (events.data ?? []).map(mapBattle),
     portfolios: (portfolios.data ?? []).map(mapPortfolio),
     registrations: (registrations.data ?? []).map(mapRegistration),
     audit: [],
