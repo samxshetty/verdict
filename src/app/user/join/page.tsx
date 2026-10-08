@@ -3,8 +3,10 @@
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { GoogleIcon, GoogleSignInModal, TopBar } from "@/components/auth";
-import { Button, ErrorNote, FullLoader } from "@/components/ui";
+import {
+  GoogleIcon,
+  TopBar
+} from "@/components/auth";import { Button, ErrorNote, FullLoader } from "@/components/ui";
 import { joinTeam } from "@/lib/api";
 import { useSession } from "@/lib/store";
 
@@ -60,13 +62,12 @@ export default function Join() {
                 <Button size="lg" className="w-full" loading={busy} disabled={code.length < 8}>
                   Join team →
                 </Button>
-                <p className="text-xs text-muted">Signed in as {session.email}</p>
+                <p className="text-xs text-muted">Signed in</p>
               </form>
             )}
           </motion.div>
         )}
       </main>
-      <GoogleSignInModal open={signin} onClose={() => setSignin(false)} />
     </div>
   );
 }

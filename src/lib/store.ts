@@ -3,7 +3,7 @@
 import { useSyncExternalStore } from "react";
 import { DB_VERSION, seedDB } from "./seed";
 import type { DB, Draft } from "./types";
-
+export const useSession = () => null;
 function createLocalStore<T>(key: string, init: () => T) {
   let cache: T | undefined;
   const listeners = new Set<() => void>();

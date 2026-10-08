@@ -7,7 +7,8 @@ import { Suspense, useEffect, useState } from "react";
 import { TopBar } from "@/components/auth";
 import { FullLoader } from "@/components/ui";
 import { canSeeRole, portfolioName } from "@/lib/api";
-import { useDB, useSession } from "@/lib/store";
+import { useDB } from "@/lib/store";
+import { supabase } from "@/lib/supabase";
 
 export default function RevealPage() {
   return (
@@ -20,34 +21,45 @@ export default function RevealPage() {
 function Reveal() {
   const { id } = useParams() as { id: string };
   const db = useDB();
-  const session = useSession();
+const [user, setUser] = useState<any>(null);
+const [loadingAuth, setLoadingAuth] = useState(true);
   const [stage, setStage] = useState(0);
 
   useEffect(() => {
-    if (stage === 1) {
-      const t = setTimeout(() => setStage(2), 3500);
-      return () => clearTimeout(t);
-    }
-    if (stage === 2) {
-      const t = setTimeout(() => setStage(3), 2500);
-      return () => clearTimeout(t);
-    }
-  }, [stage]);
-
-  if (!db || session === undefined) return <FullLoader />;
-  const reg = db.registrations.find((r) => r.id === id);
-  const battle = db.battles.find((b) => b.id === reg?.battleId);
-
-  if (!reg || !battle || !session || (!reg.viewers.includes(session.email) && reg.ownerEmail !== session.email)) {
-    return (
-      <div className="flex min-h-screen flex-col bg-ink text-bone">
-        <TopBar />
-        <div className="flex flex-1 flex-col items-center justify-center p-4 text-center">
-          <p className="font-display text-xl text-muted">Access denied or registration not found.</p>
-        </div>
-      </div>
-    );
+  if (stage === 1) {
+    const t = setTimeout(() => setStage(2), 3500);
+    return () => clearTimeout(t);
   }
+
+  if (stage === 2) {
+    const t = setTimeout(() => setStage(3), 2500);
+    return () => clearTimeout(t);
+  }
+}, [stage]);
+
+if (!db || loadingAuth) return <FullLoader />;
+
+const reg = db.registrations.find((r) => r.id === id);
+const battle = db.battles.find((b) => b.id === reg?.battleId);
+
+if (
+  !reg ||
+  !battle ||
+  !user ||
+  (!reg.viewers.includes(user.email ?? "") &&
+    reg.ownerEmail !== user.email)
+) {
+  return (
+    <div className="flex min-h-screen flex-col bg-ink text-bone">
+      <TopBar />
+      <div className="flex flex-1 flex-col items-center justify-center p-4 text-center">
+        <p className="font-display text-xl text-muted">
+          Access denied or registration not found.
+        </p>
+      </div>
+    </div>
+  );
+}
 
   if (!canSeeRole(db, reg) || !reg.assignment) {
     return (
@@ -63,8 +75,9 @@ function Reveal() {
     );
   }
 
-  const roleName = portfolioName(db, reg.assignment.portfolioId);
-  const simple = battle.revealMode === "simple";
+const assignment = reg.assignment!;
+const roleName = portfolioName(db, assignment.portfolioId);
+const simple = battle.revealMode === "simple";
 
   if (simple || stage === 3) {
     return (
@@ -89,7 +102,7 @@ function Reveal() {
             style={{ borderColor: battle.accent, boxShadow: `0 0 100px -20px ${battle.accent}` }}
           >
             <div className="font-display text-6xl leading-none md:text-8xl md:leading-none">{roleName}</div>
-            <div className="mt-4 text-sm tracking-widest text-muted uppercase">Method: {reg.assignment.method} choice</div>
+            <div className="mt-4 text-sm tracking-widest text-muted uppercase">Method: {assignment.method} choice</div>
           </motion.div>
           {simple && (
             <Link href="/user/dashboard" className="relative mt-12 text-sm tracking-widest text-muted hover:text-bone">
