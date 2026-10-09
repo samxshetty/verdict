@@ -82,7 +82,7 @@ export default function Dashboard() {
     return (
       <Shell>
         <div className="flex flex-1 flex-col items-center justify-center gap-6 py-24 text-center">
-          <h1 className="font-display text-5xl tracking-wide">Your Dossier</h1>
+          <h1 className="font-display text-5xl tracking-wide">Hello !!</h1>
           <p className="text-muted">Sign in to see your registrations.</p>
           <Link
             href="/login"
@@ -112,9 +112,9 @@ export default function Dashboard() {
   return (
     <Shell>
       <div className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 md:px-8 md:py-12">
-        <p className="font-serif text-xs tracking-[0.5em] text-gold">DOSSIER</p>
+        <p className="font-serif text-xs tracking-[0.5em] text-gold">Welcome</p>
         <h1 className="mt-1 font-display text-5xl tracking-wide md:text-6xl">
-          Welcome, {firstName}
+          {firstName}
         </h1>
 
         {regs.length === 0 ? (
