@@ -15,6 +15,9 @@ export default function ChooseBattle() {
   const router = useRouter();
   const [picked, setPicked] = useState<string | null>(null);
   const selected = picked ?? draft?.battleId ?? null;
+  const selectedBattle = db?.battles.find((b) => b.id === selected);
+  // The team-code link only applies to team events (IPL), so show it only then.
+  const showJoin = selectedBattle?.mode === "team";
 
   if (!db || !draft) return <FullLoader />;
 
@@ -47,10 +50,14 @@ export default function ChooseBattle() {
         ))}
       </div>
 
-      <div className="sticky bottom-0 mt-6 flex flex-col items-center justify-between gap-3 border-t border-line bg-ink/80 py-4 backdrop-blur md:flex-row">
-        <Link href="/user/join" className="text-sm text-muted hover:text-gold">
-          Teammate already registered your IPL team? <span className="underline">Join with team code</span>
-        </Link>
+      <div className="mt-6 flex flex-col items-center justify-between gap-3 border-t border-line py-4 md:flex-row">
+        {showJoin ? (
+          <Link href="/user/join" className="text-sm text-muted hover:text-gold">
+            Teammate already registered your IPL team? <span className="underline">Join with team code</span>
+          </Link>
+        ) : (
+          <span />
+        )}
         <Button size="lg" disabled={!selected} onClick={confirm}>
           Lock in battle →
         </Button>
