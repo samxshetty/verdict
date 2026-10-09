@@ -251,11 +251,15 @@ function Pay() {
               {rupee(reg.fee)}
             </div>
             <div className="mt-1 space-y-0.5 text-xs text-muted">
-              {quote.lines.map((l, i) => (
-                <div key={i}>
-                  {reg.members[i].name.split(" ")[0]} · {l.branch} · {rupee(l.amount)}
-                </div>
-              ))}
+              {quote.perTeam ? (
+                <div>Team fee · {rupee(quote.total)} per team</div>
+              ) : (
+                quote.lines.map((l, i) => (
+                  <div key={i}>
+                    {reg.members[i].name.split(" ")[0]} · {l.branch} · {rupee(l.amount)}
+                  </div>
+                ))
+              )}
             </div>
             <div className="relative mt-5 bg-white p-3">
               {qr ? (

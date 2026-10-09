@@ -64,7 +64,9 @@ export function canSeeRole(db: DB, r: Registration) {
 /** [SERVER] Fee is derived from branch only; the server recomputes it. This is just the quote shown in the UI. */
 export function quoteFee(battle: Battle, branches: Branch[]) {
   const lines = branches.map((br) => ({ branch: br, amount: br === "ISE" ? battle.feeISE : battle.feeOther }));
-  return { lines, total: lines.reduce((s, l) => s + l.amount, 0) };
+  // Team events (IPL) charge one flat fee per team, based on the team leader's (first member's) branch.
+  if (battle.mode === "team") return { lines, total: lines[0]?.amount ?? 0, perTeam: true as const };
+  return { lines, total: lines.reduce((s, l) => s + l.amount, 0), perTeam: false as const };
 }
 
 // ---------------- validation ----------------

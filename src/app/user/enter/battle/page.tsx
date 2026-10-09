@@ -147,7 +147,7 @@ function BattleCard({
                   <div className="text-[10px] tracking-widest text-muted uppercase">Other branches</div>
                   <div className="font-display text-2xl">{rupee(b.feeOther)}</div>
                 </div>
-                {b.mode === "team" && <div className="self-end pb-1 text-xs text-muted">per member</div>}
+                {b.mode === "team" && <div className="self-end pb-1 text-xs text-muted">per team</div>}
               </div>
             </motion.div>
           )}

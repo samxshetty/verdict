@@ -405,7 +405,7 @@ export default function Arena() {
                 <div className="text-xs text-muted">
                   ISE {rupee(battle.feeISE)} · Others{" "}
                   {rupee(battle.feeOther)}
-                  {isTeam && " · per member"} —
+                  {isTeam && " · per team"} —
                   calculated from branch
                 </div>
               </div>
