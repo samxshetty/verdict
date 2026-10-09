@@ -7,7 +7,7 @@ const bebas = Bebas_Neue({ variable: "--font-bebas", weight: "400", subsets: ["l
 const cinzel = Cinzel({ variable: "--font-cinzel", weight: ["500", "700", "900"], subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "THE VERDICT — VISTA, NMAMIT",
+  title: "THE VERDICT by VISTA",
   description: "VISTA presents THE VERDICT. Three battles. One verdict. 16–17 October, APJ Block, NMAMIT.",
 };
 
