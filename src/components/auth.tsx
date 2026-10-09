@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { useEffect, useState } from "react";
 import { Logo } from "./logo";
-import { Button, Input, Modal, Spinner } from "./ui";
+import { signOut } from "@/lib/api";
+import { Button } from "./ui";
 
 export function GoogleIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
@@ -34,8 +35,13 @@ useEffect(() => {
 
   return () => subscription.unsubscribe();
 }, []);
-  const [open, setOpen] = useState(false);
+  const router = useRouter();
   const path = usePathname();
+  const signIn = () =>
+    supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
+    });
   // No sign-in button on the first two stages; it appears from "Enter the Arena" onward.
   const hideSignIn = path.startsWith("/user/enter/battle") || path.startsWith("/user/enter/role");
   return (
@@ -55,25 +61,20 @@ useEffect(() => {
                 {session.email}
               </span>
               <Button
-  variant="ghost"
-  size="sm"
-  onClick={async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-  }}
->
-  <GoogleIcon className="h-4 w-4" />
-  Sign in
-</Button>
+                variant="ghost"
+                size="sm"
+                onClick={async () => {
+                  await signOut();
+                  router.push("/");
+                }}
+              >
+                Sign out
+              </Button>
             </>
           ) : (
             session === null &&
             !hideSignIn && (
-              <Button variant="ghost" size="sm" onClick={() => setOpen(true)}>
+              <Button variant="ghost" size="sm" onClick={signIn}>
                 <GoogleIcon className="h-4 w-4" /> Sign in
               </Button>
             )

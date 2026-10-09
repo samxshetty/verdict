@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button, Input, rupee } from "@/components/ui";
-import { rejectPayment, verifyPayment } from "@/lib/api";
+import { rejectPayment, useScreenshotUrl, verifyPayment } from "@/lib/api";
 import { useDB } from "@/lib/store";
 
 export default function PaymentsAdmin() {
@@ -40,12 +40,7 @@ export default function PaymentsAdmin() {
               </div>
               
               <div className="bg-ink p-4 flex justify-center items-center h-64 border-b border-line">
-                {r.payment.screenshot ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img src={r.payment.screenshot} alt="Screenshot" className="max-h-full max-w-full object-contain" />
-                ) : (
-                  <span className="text-muted">No screenshot</span>
-                )}
+                <Shot path={r.payment.screenshot} />
               </div>
 
               <div className="p-4 mt-auto">
@@ -79,4 +74,13 @@ export default function PaymentsAdmin() {
       )}
     </div>
   );
+}
+
+
+function Shot({ path }: { path?: string }) {
+  const url = useScreenshotUrl(path);
+  if (!path) return <span className="text-muted">No screenshot</span>;
+  if (!url) return <span className="text-muted">Loading…</span>;
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src={url} alt="Screenshot" className="max-h-full max-w-full object-contain" />;
 }

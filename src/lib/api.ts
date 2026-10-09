@@ -142,6 +142,13 @@ export async function submitPayment(registrationId: string, utr: string, screens
   await refreshDB();
 }
 
+/** Free entry (server-computed fee = 0): skip payment and confirm directly. [SERVER] confirm_free_registration re-checks fee = 0 and ownership. */
+export async function confirmFreeRegistration(registrationId: string) {
+  await requireUser();
+  ok(await supabase.rpc("confirm_free_registration", { p_id: registrationId }));
+  await refreshDB();
+}
+
 export async function joinTeam(code: string) {
   await requireUser();
   const res = ok(await supabase.rpc("join_team", { p_code: code.trim() })) as { id: string; teamName: string };

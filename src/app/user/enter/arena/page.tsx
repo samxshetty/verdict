@@ -396,7 +396,9 @@ export default function Arena() {
                   style={{ color: battle.accent2 }}
                 >
                   {quote.lines.length
-                    ? rupee(quote.total)
+                    ? quote.total === 0
+                      ? "FREE"
+                      : rupee(quote.total)
                     : "—"}
                 </div>
 
@@ -409,7 +411,9 @@ export default function Arena() {
               </div>
 
               <Button size="lg" loading={busy}>
-                Proceed to payment →
+                {quote.lines.length > 0 && quote.total === 0
+                  ? "Confirm registration →"
+                  : "Proceed to payment →"}
               </Button>
             </div>
 
