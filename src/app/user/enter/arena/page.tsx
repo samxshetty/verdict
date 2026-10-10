@@ -227,7 +227,7 @@ export default function Arena() {
                   />
 
                   <Link
-                    href="/user/join"
+                    href={`/user/join?battle=${encodeURIComponent(battle.id)}`}
                     className="pb-3 text-xs text-muted hover:text-gold"
                   >
                     Not the leader?{" "}

@@ -157,7 +157,7 @@ function Pay() {
               className="inline-flex items-center border border-emerald-500/50 px-3 py-1.5 font-display text-sm tracking-[0.18em] text-emerald-400 hover:bg-emerald-500/10"
               target="_blank"
               rel="noreferrer"
-              href={`https://wa.me/?text=${encodeURIComponent(`We're in THE VERDICT — ${battle.name}! Join our team "${reg.teamName}" with code ${reg.teamCode} at ${typeof window !== "undefined" ? window.location.origin : ""}/user/join`)}`}
+              href={`https://wa.me/?text=${encodeURIComponent(`We're in THE VERDICT — ${battle.name}! Join our team "${reg.teamName}" with code ${reg.teamCode} at ${typeof window !== "undefined" ? window.location.origin : ""}/user/join?battle=${encodeURIComponent(battle.id)}`)}`}
             >
               Share
             </a>

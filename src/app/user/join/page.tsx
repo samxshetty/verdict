@@ -1,16 +1,28 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
 import {
   GoogleIcon,
   TopBar
 } from "@/components/auth";import { Button, ErrorNote, FullLoader } from "@/components/ui";
 import { joinTeam } from "@/lib/api";
-import { useSession } from "@/lib/store";
+import { useDB, useSession } from "@/lib/store";
 
 export default function Join() {
+  return (
+    <Suspense fallback={<FullLoader />}>
+      <JoinContent />
+    </Suspense>
+  );
+}
+
+function JoinContent() {
+  const params = useSearchParams();
+  const battleId = params.get("battle");
+  const db = useDB();
+  const battle = db?.battles.find((item) => item.id === battleId);
   const session = useSession();
   const router = useRouter();
   const [signin, setSignin] = useState(false);
@@ -27,7 +39,7 @@ export default function Join() {
           <FullLoader />
         ) : (
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="glass relative w-full max-w-lg p-8 text-center md:p-10">
-            <p className="font-serif text-xs tracking-[0.5em] text-[#3b82f6]">IPL MEGA AUCTION 2027</p>
+            <p className="font-serif text-xs tracking-[0.5em] text-[#3b82f6]">{battle?.name?.toUpperCase() ?? "THE VERDICT"}</p>
             <h1 className="mt-2 font-display text-5xl tracking-wide">Join Your Team</h1>
             <p className="mt-2 text-sm text-muted">Your team leader registered the team and received a code. Enter it to link your account and follow your team&apos;s status and reveal.</p>
             {!session ? (

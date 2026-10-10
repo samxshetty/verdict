@@ -65,7 +65,7 @@ export default function ChooseBattle() {
 
       <div className="mt-6 flex flex-col items-center justify-between gap-3 border-t border-line py-4 md:flex-row">
         {showJoin ? (
-          <Link href="/user/join" className="text-sm text-muted hover:text-gold">
+          <Link href={`/user/join?battle=${encodeURIComponent(selectedBattle?.id ?? selected ?? "")}`} className="text-sm text-muted hover:text-gold">
             Teammate already registered your team? <span className="underline">Join with team code</span>
           </Link>
         ) : (

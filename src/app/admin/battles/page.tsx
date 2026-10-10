@@ -128,12 +128,7 @@ function BattleManager({ battle }: { battle: Battle }) {
         </div>
       </section>}
 
-      {isStorageWars ? (
-        <section className="border border-line bg-ink-2 p-6">
-          <h2 className="font-display text-2xl mb-2">Roles & Portfolios</h2>
-          <p className="text-sm text-muted">Storage Wars does not use roles or portfolios. Teams register directly with 2–4 members, and no role assignment or reveal is required.</p>
-        </section>
-      ) : <>
+      {!isStorageWars && <>
       <section className="border border-gold/30 bg-gold/5 p-6 space-y-6">
         <div>
           <h2 className="font-display text-2xl text-gold">Assignment Engine</h2>
