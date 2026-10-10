@@ -22,7 +22,7 @@ export default function ClaimRole() {
   const sensors = useSensors(useSensor(MouseSensor, { activationConstraint: { distance: 6 } }));
 
   useEffect(() => {
-    if (draft?.battleId === "storagewars") {
+    if (draft?.battleId === "bollywood") {
       draftStore.update((d) => {
         d.preferences = [];
         d.locked = true;
@@ -34,7 +34,7 @@ export default function ClaimRole() {
   if (!db || !draft) return <FullLoader />;
   const battle = db.battles.find((b) => b.id === draft.battleId);
   if (!battle) return <NeedBattle />;
-  if (battle.id === "storagewars") return <FullLoader />;
+  if (battle.id === "bollywood") return <FullLoader />;
 
   const pfs = portfoliosOf(db, battle.id);
   const locked = !!draft.locked;

@@ -92,7 +92,7 @@ export default function Arena() {
   if (existing) return <FullLoader />;
 
   const isTeam = battle.mode === "team";
-  const isStorageWars = battle.id === "storagewars";
+  const isStorageWars = battle.id === "bollywood";
 
   const list: FormMember[] =
     members ??
@@ -149,7 +149,7 @@ export default function Arena() {
     try {
       await createRegistration({
         battleId: battle.id,
-        preferences: draft.preferences!,
+        preferences: isStorageWars ? [] : (draft.preferences ?? []),
         members: list as Member[],
         teamName: isTeam ? teamName : undefined,
       });
@@ -171,7 +171,7 @@ export default function Arena() {
       </p>
 
       <h1 className="mt-1 font-display text-5xl tracking-wide md:text-6xl">
-        {isStorageWars ? "Register Your Team" : "Enter the Arena"}
+        {isStorageWars ? "Register for Storage Wars" : "Enter the Arena"}
       </h1>
 
       <AnimatePresence mode="wait">
@@ -198,6 +198,14 @@ export default function Arena() {
               Signed in as{" "}
               <span className="text-bone">{user.email}</span>
             </div>
+
+            {isStorageWars && (
+              <div className="glass p-5 md:p-6">
+                <p className="text-sm text-muted">
+                  Storage Wars is free to enter. Register a team of 2–4 members with a team name. No roles or portfolios are required, and your entry will be confirmed automatically.
+                </p>
+              </div>
+            )}
 
             {isTeam && (
               <div className="glass p-5 md:p-6">
@@ -230,7 +238,7 @@ export default function Arena() {
                 </div>
 
                 <p className="mt-3 text-xs text-muted">
-                  {isStorageWars ? "Storage Wars is free to enter. Add your team name and all team members; there are no roles to choose and your entry will be confirmed automatically." : "You are registering the whole team. A "}{!isStorageWars && " "}
+                  {isStorageWars ? "Storage Wars is free to enter. Add your team name and 2–4 team members; there are no roles to choose and your entry will be confirmed automatically." : "You are registering the whole team. A "}{!isStorageWars && " "}
                 {!isStorageWars && <>
                   <span
                     style={{ color: battle.accent2 }}
@@ -406,10 +414,9 @@ export default function Arena() {
                 </div>
 
                 <div className="text-xs text-muted">
-                  ISE {rupee(battle.feeISE)} · Others{" "}
-                  {rupee(battle.feeOther)}
-                  {isTeam && " · per team"} —
-                  calculated from branch
+                  {isStorageWars
+                    ? "No payment required"
+                    : <>ISE {rupee(battle.feeISE)} · Others {rupee(battle.feeOther)}{isTeam && " · per team"} — calculated from branch</>}
                 </div>
               </div>
 

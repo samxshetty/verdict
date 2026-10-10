@@ -27,10 +27,10 @@ export default function ChooseBattle() {
     if (draft.battleId !== selected) {
       draftStore.set({ battleId: selected });
     }
-    if (battle?.id === "storagewars") {
-      // Storage Wars is a free team registration with no role/portfolio selection.
+    if (battle?.id === "bollywood") {
+      // Storage Wars is free to enter with no role/portfolio selection.
       draftStore.update((d) => {
-        d.battleId = "storagewars";
+        d.battleId = battle.id;
         d.preferences = [];
         d.locked = true;
       });
@@ -121,7 +121,7 @@ function BattleCard({
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src={b.image}
+        src={b.id === "bollywood" ? "/battles/storagewars.jpg" : b.image}
         alt=""
         className={cx("absolute inset-0 h-full w-full object-cover transition-transform duration-[1.5s]", selected ? "scale-105" : "group-hover:scale-105")}
       />
