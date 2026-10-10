@@ -23,7 +23,20 @@ export default function ChooseBattle() {
 
   const confirm = () => {
     if (!selected) return;
-    if (draft.battleId !== selected) draftStore.set({ battleId: selected });
+    const battle = db?.battles.find((b) => b.id === selected);
+    if (draft.battleId !== selected) {
+      draftStore.set({ battleId: selected });
+    }
+    if (battle?.id === "storagewars") {
+      // Storage Wars is a free team registration with no role/portfolio selection.
+      draftStore.update((d) => {
+        d.battleId = "storagewars";
+        d.preferences = [];
+        d.locked = true;
+      });
+      router.push("/user/enter/arena");
+      return;
+    }
     router.push("/user/enter/role");
   };
 
@@ -32,7 +45,7 @@ export default function ChooseBattle() {
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
         <p className="font-serif text-xs tracking-[0.5em] text-gold">STAGE 01</p>
         <h1 className="mt-1 font-display text-5xl tracking-wide md:text-7xl">Choose Your Battle</h1>
-        <p className="mt-2 max-w-xl text-muted">Three arenas. Pick the one you were born for. You can only enter one per registration.</p>
+        <p className="mt-2 max-w-xl text-muted">Choose your arena. Storage Wars is free to enter with instant confirmation; no roles to choose.</p>
       </motion.div>
 
       <div className="mt-8 flex flex-1 flex-col gap-4 md:min-h-[520px] md:flex-row">

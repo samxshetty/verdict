@@ -92,6 +92,7 @@ export default function Arena() {
   if (existing) return <FullLoader />;
 
   const isTeam = battle.mode === "team";
+  const isStorageWars = battle.id === "storagewars";
 
   const list: FormMember[] =
     members ??
@@ -170,7 +171,7 @@ export default function Arena() {
       </p>
 
       <h1 className="mt-1 font-display text-5xl tracking-wide md:text-6xl">
-        Enter the Arena
+        {isStorageWars ? "Register Your Team" : "Enter the Arena"}
       </h1>
 
       <AnimatePresence mode="wait">
@@ -229,7 +230,8 @@ export default function Arena() {
                 </div>
 
                 <p className="mt-3 text-xs text-muted">
-                  You are registering the whole team. A{" "}
+                  {isStorageWars ? "Storage Wars is free to enter. Add your team name and all team members; there are no roles to choose and your entry will be confirmed automatically." : "You are registering the whole team. A "}{!isStorageWars && " "}
+                {!isStorageWars && <>
                   <span
                     style={{ color: battle.accent2 }}
                   >
@@ -238,6 +240,7 @@ export default function Arena() {
                   will be generated after this step — share it
                   so teammates can follow the team's status and
                   reveal.
+                </>}
                 </p>
               </div>
             )}
@@ -411,9 +414,11 @@ export default function Arena() {
               </div>
 
               <Button size="lg" loading={busy}>
-                {quote.lines.length > 0 && quote.total === 0
-                  ? "Confirm registration →"
-                  : "Proceed to payment →"}
+                {isStorageWars
+                  ? "Register & confirm free entry →"
+                  : quote.lines.length > 0 && quote.total === 0
+                    ? "Confirm registration →"
+                    : "Proceed to payment →"}
               </Button>
             </div>
 

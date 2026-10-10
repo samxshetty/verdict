@@ -4,7 +4,7 @@ import { DndContext, DragOverlay, MouseSensor, useDraggable, useDroppable, useSe
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, FullLoader, LockIcon, Modal, cx } from "@/components/ui";
 import { portfoliosOf } from "@/lib/api";
 import { draftStore, useDB, useDraft } from "@/lib/store";
@@ -21,9 +21,20 @@ export default function ClaimRole() {
   const [confirming, setConfirming] = useState(false);
   const sensors = useSensors(useSensor(MouseSensor, { activationConstraint: { distance: 6 } }));
 
+  useEffect(() => {
+    if (draft?.battleId === "storagewars") {
+      draftStore.update((d) => {
+        d.preferences = [];
+        d.locked = true;
+      });
+      router.replace("/user/enter/arena");
+    }
+  }, [draft?.battleId, router]);
+
   if (!db || !draft) return <FullLoader />;
   const battle = db.battles.find((b) => b.id === draft.battleId);
   if (!battle) return <NeedBattle />;
+  if (battle.id === "storagewars") return <FullLoader />;
 
   const pfs = portfoliosOf(db, battle.id);
   const locked = !!draft.locked;
