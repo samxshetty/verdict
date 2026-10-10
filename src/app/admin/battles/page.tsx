@@ -51,7 +51,8 @@ export default function BattlesAdmin() {
 function BattleManager({ battle }: { battle: Battle }) {
   const db = useDB()!;
   const [b, setB] = useState(battle);
-  const pfs = db.portfolios.filter(p => p.battleId === battle.id);
+  const isStorageWars = battle.id === "bollywood";
+  const pfs = isStorageWars ? [] : db.portfolios.filter(p => p.battleId === battle.id);
   const regs = db.registrations.filter(r => r.battleId === battle.id);
   const verified = regs.filter(r => r.payment.status === "verified");
   const assigned = verified.filter(r => r.assignment);
@@ -104,7 +105,7 @@ function BattleManager({ battle }: { battle: Battle }) {
         </div>
       </section>
 
-      <section>
+      {!isStorageWars && <section>
         <h2 className="font-display text-2xl mb-4">Portfolios ({pfs.length})</h2>
         <div className="border border-line bg-ink-2">
           <table className="w-full text-left text-sm">
@@ -125,8 +126,14 @@ function BattleManager({ battle }: { battle: Battle }) {
             </tbody>
           </table>
         </div>
-      </section>
+      </section>}
 
+      {isStorageWars ? (
+        <section className="border border-line bg-ink-2 p-6">
+          <h2 className="font-display text-2xl mb-2">Roles & Portfolios</h2>
+          <p className="text-sm text-muted">Storage Wars does not use roles or portfolios. Teams register directly with 2–4 members, and no role assignment or reveal is required.</p>
+        </section>
+      ) : <>
       <section className="border border-gold/30 bg-gold/5 p-6 space-y-6">
         <div>
           <h2 className="font-display text-2xl text-gold">Assignment Engine</h2>
@@ -170,6 +177,7 @@ function BattleManager({ battle }: { battle: Battle }) {
           )}
         </div>
       </section>
+      </>}
     </div>
   );
 }
