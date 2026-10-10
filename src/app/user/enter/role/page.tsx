@@ -83,10 +83,10 @@ export default function ClaimRole() {
           <p className="font-serif text-xs tracking-[0.5em]" style={{ color: battle.accent }}>
             STAGE 02 · {battle.name.toUpperCase()}
           </p>
-          <h1 className="mt-1 font-display text-5xl tracking-wide md:text-6xl">Claim Your Role</h1>
+          <h1 className="mt-1 font-display text-5xl tracking-wide md:text-6xl">{battle.id === "football" ? "Choose Your Club" : "Claim Your Role"}</h1>
           <p className="mt-2 text-sm text-muted">
-            Rank your top three. <span className="hidden md:inline">Drag roles into the slots, or click to fill in order.</span>
-            <span className="md:hidden">Tap roles in order of preference.</span> The Verdict assigns one.
+            Rank your top three {battle.id === "football" ? "clubs" : "roles"}. <span className="hidden md:inline">Drag {battle.id === "football" ? "clubs" : "roles"} into the slots, or click to fill in order.</span>
+            <span className="md:hidden">Tap {battle.id === "football" ? "clubs" : "roles"} in order of preference.</span> The Verdict assigns one.
           </p>
           {battle.mode === "team" && (
             <p className="mt-3 border-l-2 px-3 py-2 text-xs text-bone/80" style={{ borderColor: battle.accent, background: `${battle.accent}12` }}>

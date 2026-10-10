@@ -16,7 +16,7 @@ export default function ChooseBattle() {
   const [picked, setPicked] = useState<string | null>(null);
   const selected = picked ?? draft?.battleId ?? null;
   const selectedBattle = db?.battles.find((b) => b.id === selected);
-  // The team-code link only applies to team events (IPL), so show it only then.
+  // Team-code joining is available for team-based auctions (IPL and Football).
   const showJoin = selectedBattle?.mode === "team";
 
   if (!db || !draft) return <FullLoader />;
@@ -53,7 +53,7 @@ export default function ChooseBattle() {
       <div className="mt-6 flex flex-col items-center justify-between gap-3 border-t border-line py-4 md:flex-row">
         {showJoin ? (
           <Link href="/user/join" className="text-sm text-muted hover:text-gold">
-            Teammate already registered your IPL team? <span className="underline">Join with team code</span>
+            Teammate already registered your team? <span className="underline">Join with team code</span>
           </Link>
         ) : (
           <span />
